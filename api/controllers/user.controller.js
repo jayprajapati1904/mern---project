@@ -1,3 +1,58 @@
+import bcrypt from "bcryptjs";
+import { ErrorHandler } from "../utils/error.js";
+import User from "../models/user.model.js";
+
 export const test = (req, res) => {
   res.json({ message: "Hello World" });
+};
+
+export const UpdateUser = async (req, res, next) => {
+  console.log(req.User);
+  if (req.User.id != req.params.userId) {
+    return next(ErrorHandler(403, "You are not allowed to update this user"));
+  }
+
+  if (req.body.password) {
+    if (req.body.password.length < 6) {
+      return next(ErrorHandler(403, "Password must be at least 6 characters"));
+    }
+    req.body.password = bcrypt.hashSync(req.body.password, 10);
+  }
+  if (req.body.username) {
+    if (req.body.username.length < 7 || req.body.username.length > 20) {
+      return next(
+        ErrorHandler(400, "Username must be between 7 and 20 characters")
+      );
+    }
+  }
+
+  // if (req.body.username.includes(" ")) {
+  //   return next(ErrorHandler(400, "username can not conatin a space"));
+  // }
+
+  // if (req.body.username !== req.body.username.toLowerCase()) {
+  //   return next(ErrorHandler(400, "username must be in lowercase"));
+  // }
+
+  // if (req.body.username.match(/^[a-zA-Z0-9]+$/)) {
+  //   return next(
+  //     ErrorHandler(400, "Username can only contain letters and numbers' ")
+  //   );
+  // }
+  try {
+    const updateUser = await User.findByIdAndUpdate(
+      req.params.userId,
+      {
+        $set: {
+          username: req.body.username,
+          email: req.body.email,
+          password: req.body.password,
+          profilePicture: req.body.profilePicture,
+        },
+      },
+      { new: true }
+    );
+  } catch (error) {
+    next(error);
+  }
 };
