@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import DashProfile from "../components/DashProfile";
 import DashSidebar from "../components/DashSidebar";
+import DashPosts from "../components/DashPosts";
 
 export default function Dashboard() {
   const location = useLocation();
-  const [tab, settab] = useState('');
+  const [tab, settab] = useState("");
   useEffect(() => {
     const urlparams = new URLSearchParams(location.search);
     const tabFromUrl = urlparams.get("tab");
@@ -22,6 +23,8 @@ export default function Dashboard() {
       </div>
       {/* profile... */}
       {tab === "profile" && <DashProfile />}
+      {/* Posts */}
+      {tab === "posts" && <DashPosts />}
     </div>
   );
 }
