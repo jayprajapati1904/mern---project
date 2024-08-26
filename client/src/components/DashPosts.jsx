@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
-
 export default function DashPosts() {
   const { currentUser } = useSelector((state) => state.user);
   const [showMore, setshowMore] = useState(true);
@@ -12,6 +11,7 @@ export default function DashPosts() {
   const [showModal, setShowModal] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState("");
   console.log(userPosts);
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -54,8 +54,9 @@ export default function DashPosts() {
       console.log(error.message);
     }
   };
+
   const handleShowMore = async () => {
-    startIndex = userPosts.length();
+    const startIndex = userPosts.length; // Fixed the typo
     try {
       const res = await fetch(
         `/api/post/getpost?userId=${currentUser._id}&startIndex=${startIndex}`
@@ -88,7 +89,7 @@ export default function DashPosts() {
               </Table.HeadCell>
             </Table.Head>
             {userPosts.map((post) => (
-              <Table.Body className="divide-y">
+              <Table.Body key={post._id} className="divide-y">
                 <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
                   <Table.Cell>
                     {new Date(post.updatedAt).toLocaleDateString()}
