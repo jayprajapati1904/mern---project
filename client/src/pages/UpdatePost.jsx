@@ -13,12 +13,18 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Post from "../../../api/models/post.model";
 
 export default function UpdatePost() {
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadError, setImageUploadError] = useState(null);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "uncategorized",
+    content: "",
+    image: "",
+  });
   const [publishError, setPublishError] = useState(null);
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
@@ -30,6 +36,7 @@ export default function UpdatePost() {
     const fetchPost = async () => {
       try {
         const res = await fetch(`/api/post/getpost?postId=${postId}`);
+
         const data = await res.json();
 
         if (!res.ok) {
@@ -38,6 +45,8 @@ export default function UpdatePost() {
         }
 
         setPublishError(null);
+        console.log("Fetched Post Data:", data.posts[0]); // Debugging: Log the fetched post data
+
         setFormData(data.posts[0]);
       } catch (error) {
         console.log(error);
@@ -88,12 +97,13 @@ export default function UpdatePost() {
     e.preventDefault();
     try {
       const res = await fetch(
-        `/api/post/updatepost/${formData._id}/${currentUser._id}`,
+        `/api/post/updatepost/${postId}/${currentUser._id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
+
           body: JSON.stringify(formData),
         }
       );
