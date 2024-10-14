@@ -13,7 +13,6 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Post from "../../../api/models/post.model";
 
 export default function UpdatePost() {
   const [file, setFile] = useState(null);
