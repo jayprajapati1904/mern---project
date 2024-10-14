@@ -5,6 +5,7 @@ import {
   DeleteUser,
   signout,
   getUsers,
+  getUser,
 } from "../controllers/user.controller.js";
 import { VerifyToken } from "../utils/userVerify.js";
 
@@ -15,5 +16,5 @@ router.put("/update/:userId", VerifyToken, UpdateUser);
 router.delete("/delete/:userId", VerifyToken, DeleteUser);
 router.post("/signout", signout);
 router.get("/getusers", VerifyToken, getUsers);
-
+router.get("/:userId", getUser);
 export default router;
