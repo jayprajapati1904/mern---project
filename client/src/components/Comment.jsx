@@ -56,10 +56,10 @@ export default function Comment({ comment, onLike }) {
             <FaThumbsUp className="text-sm" />
           </button>
           <p className="text-gray-400">
-            {comment.numberOfLikes > 0 &&
+            {comment.numberOfLikes >= 0 &&
               comment.numberOfLikes +
                 " " +
-                (comment.numberOfLikes === 1 ? "like" : "likes")}
+                (comment.numberOfLikes >= 1 ? "like" : "likes")}
           </p>
         </div>
       </div>

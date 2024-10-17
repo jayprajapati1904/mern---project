@@ -12,6 +12,7 @@ export default function CommentSection({ postId }) {
   const [commentError, setCommentError] = useState(null);
   const [comments, setComments] = useState([]);
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (comment.length > 200) {
@@ -61,7 +62,6 @@ export default function CommentSection({ postId }) {
         navigate("/sign-in");
         return;
       }
-      console.log(commentId);
 
       const res = await fetch(`/api/comment/likeComment/${commentId}`, {
         method: "PUT",
@@ -72,13 +72,14 @@ export default function CommentSection({ postId }) {
       if (res.ok) {
         setComments(
           comments.map((comment) => {
-            comment._id === commentId
+            // Return updated comment if it's the one liked
+            return comment._id === commentId
               ? {
                   ...comment,
                   likes: data.likes,
                   numberOfLikes: data.likes.length,
                 }
-              : comment;
+              : comment; // Otherwise return the original comment
           })
         );
       }
@@ -86,6 +87,7 @@ export default function CommentSection({ postId }) {
       console.log(error.message);
     }
   };
+
   return (
     <div className="max-w-2xl mx-auto w-full p-3">
       {currentUser ? (
@@ -149,9 +151,19 @@ export default function CommentSection({ postId }) {
               <p>{comments.length}</p>
             </div>
           </div>
-          {comments.map((comment) => (
-            <Comment key={comment._id} comment={comment} onLike={handleLike} />
-          ))}
+          {comments.map((comment) => {
+            if (!comment || !comment._id) {
+              console.error("Invalid comment object:", comment);
+              return null; // Skip rendering for invalid comments
+            }
+            return (
+              <Comment
+                key={comment._id}
+                comment={comment}
+                onLike={handleLike}
+              />
+            );
+          })}
         </>
       )}
     </div>

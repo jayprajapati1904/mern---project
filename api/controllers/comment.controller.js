@@ -40,7 +40,7 @@ export const likeComment = async (req, res, next) => {
     }
 
     const userIndex = comment.likes.indexOf(req.User.id);
-    console.log(userIndex);
+
     if (userIndex === -1) {
       comment.numberOfLikes += 1;
       comment.likes.push(req.User.id);
@@ -52,6 +52,7 @@ export const likeComment = async (req, res, next) => {
     await comment.save();
     res.status(200).json(comment);
   } catch (error) {
+    console.error(error);
     next(error);
   }
 };
