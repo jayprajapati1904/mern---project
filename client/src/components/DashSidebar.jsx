@@ -9,6 +9,7 @@ import {
   HiDocumentText,
   HiOutlineUserGroup,
   HiAnnotation,
+  HiChartPie,
 } from "react-icons/hi";
 
 export default function DashSidebar() {
@@ -44,6 +45,17 @@ export default function DashSidebar() {
     <Sidebar>
       <Sidebar.Items>
         <Sidebar.ItemGroup className="flex flex-col gap-1">
+          {currentUser && currentUser.isAdmin && (
+            <Link to="/dashboard?tab=dash">
+              <Sidebar.Item
+                active={tab === "dash" || !tab}
+                icon={HiChartPie}
+                as="div"
+              >
+                Dashboard
+              </Sidebar.Item>
+            </Link>
+          )}
           <Link to="/dashboard?tab=profile">
             <Sidebar.Item
               active={tab === "profile"}
@@ -66,7 +78,6 @@ export default function DashSidebar() {
               </Sidebar.Item>
             </Link>
           )}
-
           {currentUser.isAdmin && (
             <>
               <Link to="/dashboard?tab=users">
